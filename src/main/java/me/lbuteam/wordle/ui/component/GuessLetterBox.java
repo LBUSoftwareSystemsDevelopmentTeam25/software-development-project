@@ -1,4 +1,4 @@
-package com.ignpurple.wordle.ui.component;
+package me.lbuteam.wordle.ui.component;
 
 import javax.swing.*;
 

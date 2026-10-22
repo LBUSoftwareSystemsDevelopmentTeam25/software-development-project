@@ -1,7 +1,7 @@
-package com.ignpurple.wordle;
+package me.lbuteam.wordle;
 
-import com.ignpurple.wordle.game.WordleGame;
-import com.ignpurple.wordle.ui.WordleUI;
+import me.lbuteam.wordle.game.WordleGame;
+import me.lbuteam.wordle.ui.WordleUI;
 
 public class WordleMain {
     private final WordleGame game;

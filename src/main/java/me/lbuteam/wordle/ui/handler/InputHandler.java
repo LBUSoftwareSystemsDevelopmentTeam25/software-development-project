@@ -1,6 +1,6 @@
-package com.ignpurple.wordle.ui.handler;
+package me.lbuteam.wordle.ui.handler;
 
-import com.ignpurple.wordle.ui.WordleUI;
+import me.lbuteam.wordle.ui.WordleUI;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;

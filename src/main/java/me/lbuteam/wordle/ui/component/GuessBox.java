@@ -1,8 +1,10 @@
-package com.ignpurple.wordle.ui.component;
+package me.lbuteam.wordle.ui.component;
 
-import com.ignpurple.wordle.game.WordleGame;
-import com.ignpurple.wordle.ui.UIConstant;
-import com.ignpurple.wordle.util.WordleGuessUtil;
+import me.lbuteam.wordle.WordleMain;
+import me.lbuteam.wordle.game.WordleGame;
+import me.lbuteam.wordle.ui.UIConstant;
+import me.lbuteam.wordle.ui.WordleUI;
+import me.lbuteam.wordle.util.WordleGuessUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,13 +15,15 @@ import java.util.stream.Collectors;
 
 public class GuessBox {
     private final WordleGame game;
+    private final WordleUI ui;
     private final JFrame parent;
     private final JPanel panel;
     private int index = 0;
     private final List<GuessLetterBox> letterBoxes;
 
-    public GuessBox(final WordleGame game, final JFrame parent) {
-        this.game = game;
+    public GuessBox(final WordleMain wordleMain, final WordleUI ui, final JFrame parent) {
+        this.game = wordleMain.getGame();
+        this.ui = ui;
         this.parent = parent;
         this.letterBoxes = new ArrayList<>();
         this.panel = this.initialize();
@@ -35,6 +39,7 @@ public class GuessBox {
                 .collect(Collectors.joining());
         if (guess.strip().length() != 5) return;
 
+        this.ui.incrementGuess();
         new Thread(() -> {
             try {
                 final int[] result = WordleGuessUtil.guess(guess, this.game.getWord());
@@ -102,7 +107,7 @@ public class GuessBox {
 
     private JPanel initialize() {
         final JPanel panel = new JPanel();
-        panel.setLayout(null); // Fix: Deactivate layouts to allow absolute pixel placement via setBounds
+        panel.setLayout(null);
 
         final int parentWidth = this.parent.getWidth();
         final int width = 450;

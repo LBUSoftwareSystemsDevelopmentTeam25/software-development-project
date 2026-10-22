@@ -1,4 +1,4 @@
-package com.ignpurple.wordle.game;
+package me.lbuteam.wordle.game;
 
 public class WordleGame {
     private final String word = "zebra";

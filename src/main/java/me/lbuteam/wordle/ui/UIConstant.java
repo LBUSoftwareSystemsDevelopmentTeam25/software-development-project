@@ -1,4 +1,4 @@
-package com.ignpurple.wordle.ui;
+package me.lbuteam.wordle.ui;
 
 import java.awt.*;
 

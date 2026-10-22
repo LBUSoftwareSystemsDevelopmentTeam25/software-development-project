@@ -1,4 +1,4 @@
-package com.ignpurple.wordle.util;
+package me.lbuteam.wordle.util;
 
 import java.util.*;
 
