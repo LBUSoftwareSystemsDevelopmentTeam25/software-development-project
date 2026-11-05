@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class GuessBox {
@@ -47,7 +46,7 @@ public class GuessBox {
                     final GuessLetterBox letterBox = this.letterBoxes.get(index);
                     letterBox.inner().setBackground(
                             result[index] == 0
-                                    ? UIConstant.LETTER_BACKGROUND_COLOR
+                                    ? UIConstant.LETTER_INCORRECT_COLOR
                                     : (result[index] == 1
                                        ? UIConstant.LETTER_CONTAINING_COLOR
                                        : UIConstant.LETTER_CORRECT_COLOR
