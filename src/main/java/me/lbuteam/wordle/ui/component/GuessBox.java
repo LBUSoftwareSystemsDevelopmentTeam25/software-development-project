@@ -2,6 +2,7 @@ package me.lbuteam.wordle.ui.component;
 
 import me.lbuteam.wordle.WordleMain;
 import me.lbuteam.wordle.game.WordleGame;
+import me.lbuteam.wordle.game.state.GuessState;
 import me.lbuteam.wordle.ui.UIConstant;
 import me.lbuteam.wordle.util.WordleGuessUtil;
 import me.lbuteam.wordle.util.WordValidator;
@@ -33,21 +34,11 @@ public class GuessBox {
         return this.panel;
     }
 
-    public void guess() {
+    public GuessState guess() {
         final String guess = this.letterBoxes.stream()
                 .map((box) -> box.label().getText())
                 .collect(Collectors.joining());
-        if (guess.strip().length() != 5) return;
-
-        if (!validator.isValidWord(guess)) {
-            JOptionPane.showMessageDialog(
-                    this.parent,
-                    "Not a valid word! Please try again.",
-                    "Invalid Word",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
+        if (guess.strip().length() != 5 || !validator.isValidWord(guess)) return GuessState.INVALID;
 
         this.guessComponent.incrementGuess();
         new Thread(() -> {
@@ -71,7 +62,7 @@ public class GuessBox {
             }
         }).start();
 
-        this.game.guessWord(guess);
+        return this.game.guessWord(guess) ? GuessState.CORRECT : GuessState.INCORRECT;
     }
 
     public void removeCharacter() {

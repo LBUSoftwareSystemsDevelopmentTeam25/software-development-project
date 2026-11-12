@@ -1,6 +1,7 @@
 package me.lbuteam.wordle.ui.component;
 
 import me.lbuteam.wordle.WordleMain;
+import me.lbuteam.wordle.game.state.GuessState;
 import me.lbuteam.wordle.ui.WordleUI;
 
 import javax.swing.*;
@@ -44,7 +45,21 @@ public class GuessComponent {
     }
 
     public void guessWord() {
-        this.guessBoxes.get(this.guess).guess();
+        final GuessState state = this.guessBoxes.get(this.guess).guess();
+        switch (state) {
+            case CORRECT -> {
+                System.out.println("Word was correct!");
+            }
+            case INVALID -> JOptionPane.showMessageDialog(
+                    this.ui.getFrame(),
+                    "Not a valid word! Please try again.",
+                    "Invalid Word",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            case INCORRECT -> {
+                System.out.println("Word was incorrect!");
+            }
+        }
     }
 
     public void incrementGuess() {
