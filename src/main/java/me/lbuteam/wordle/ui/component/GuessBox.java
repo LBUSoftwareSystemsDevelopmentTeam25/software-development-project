@@ -3,7 +3,6 @@ package me.lbuteam.wordle.ui.component;
 import me.lbuteam.wordle.WordleMain;
 import me.lbuteam.wordle.game.WordleGame;
 import me.lbuteam.wordle.ui.UIConstant;
-import me.lbuteam.wordle.ui.WordleUI;
 import me.lbuteam.wordle.util.WordleGuessUtil;
 import me.lbuteam.wordle.util.WordValidator;
 
@@ -16,15 +15,15 @@ import java.util.stream.Collectors;
 public class GuessBox {
     private static final WordValidator validator = new WordValidator();
     private final WordleGame game;
-    private final WordleUI ui;
+    private final GuessComponent guessComponent;
     private final JFrame parent;
     private final JPanel panel;
     private int index = 0;
     private final List<GuessLetterBox> letterBoxes;
 
-    public GuessBox(final WordleMain wordleMain, final WordleUI ui, final JFrame parent) {
+    public GuessBox(final WordleMain wordleMain, final GuessComponent guessComponent, final JFrame parent) {
         this.game = wordleMain.getGame();
-        this.ui = ui;
+        this.guessComponent = guessComponent;
         this.parent = parent;
         this.letterBoxes = new ArrayList<>();
         this.panel = this.initialize();
@@ -50,7 +49,7 @@ public class GuessBox {
             return;
         }
 
-        this.ui.incrementGuess();
+        this.guessComponent.incrementGuess();
         new Thread(() -> {
             try {
                 final int[] result = WordleGuessUtil.guess(guess, this.game.getWord());
@@ -71,6 +70,8 @@ public class GuessBox {
                 exception.printStackTrace();
             }
         }).start();
+
+        this.game.guessWord(guess);
     }
 
     public void removeCharacter() {

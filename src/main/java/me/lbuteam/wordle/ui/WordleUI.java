@@ -1,59 +1,53 @@
 package me.lbuteam.wordle.ui;
 
-import me.lbuteam.wordle.WordleMain;import me.lbuteam.wordle.ui.component.GuessBox;
+import me.lbuteam.wordle.WordleMain;
+import me.lbuteam.wordle.ui.component.GuessComponent;
 import me.lbuteam.wordle.ui.handler.InputHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WordleUI {
     private final WordleMain wordle;
     private final JFrame ui;
-    private int guess = 0;
-    private final List<GuessBox> guessBoxes;
+    private GuessComponent guessComponent;
 
     public WordleUI(final WordleMain wordle) {
         this.wordle = wordle;
         this.ui = this.initialize();
-        this.guessBoxes = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            this.guessBoxes.add(new GuessBox(this.wordle, this, this.ui));
-        }
+        this.guessComponent = new GuessComponent(this.wordle, this);
+    }
+
+    public JFrame getFrame() {
+        return this.ui;
+    }
+
+    public void add(final JComponent component) {
+        this.ui.add(component);
     }
 
     public void start() {
         this.ui.setVisible(true);
-        for (int index = 0; index < this.guessBoxes.size(); index++) {
-            final GuessBox guessBox = this.guessBoxes.get(index);
-            final JPanel panel = guessBox.getPanel();
-            final Rectangle rectangle = panel.getBounds();
-            panel.setBounds((int) rectangle.getX(), index * 90, (int) rectangle.getWidth(), (int) rectangle.getHeight());
-            this.ui.add(panel);
-        }
-    }
-
-    public void incrementGuess() {
-        this.guess++;
     }
 
     public void handleKeyPress(final KeyEvent event) {
+        if (this.wordle.getGame().isDone()) return;
+
         final int keyCode = event.getKeyCode();
         if (keyCode == KeyEvent.VK_BACK_SPACE) {
-            this.guessBoxes.get(this.guess).removeCharacter();
+            this.guessComponent.removeCharacter();
             return;
         }
 
         if (keyCode == KeyEvent.VK_ENTER) {
-            this.guessBoxes.get(this.guess).guess();
+            this.guessComponent.guessWord();
             return;
         }
 
         if (keyCode < KeyEvent.VK_A || keyCode > KeyEvent.VK_Z) return;
 
-        this.guessBoxes.get(this.guess).addCharacter(event.getKeyChar());
+        this.guessComponent.addCharacter(event.getKeyChar());
     }
 
     private JFrame initialize() {

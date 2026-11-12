@@ -1,5 +1,7 @@
 package me.lbuteam.wordle.game;
 
+import me.lbuteam.wordle.WordleMain;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,10 +13,39 @@ import java.util.Random;
 
 
 public class WordleGame {
+    private final WordleMain wordleMain;
+    private String word;
+    private volatile boolean done;
 
-    private final String word;
+    public WordleGame(final WordleMain wordleMain) {
+        this.wordleMain = wordleMain;
+        this.word = this.pickWord();
+        this.done = false;
 
-    public WordleGame() {
+        System.out.println("Randomly selected word: " + this.word);
+    }
+
+    public String getWord() {
+        return this.word;
+    }
+
+    public boolean isDone() {
+        return this.done;
+    }
+
+    public void setDone(final boolean done) {
+        this.done = done;
+    }
+
+    public boolean guessWord(final String word) {
+        if (!word.equalsIgnoreCase(this.word)) return false;
+        this.setDone(true);
+
+        return true;
+    }
+
+    private String pickWord() {
+
         List<String> words = new ArrayList<>();
 
         try(InputStream stream = getClass().getResourceAsStream("/words.txt")){
@@ -43,13 +74,7 @@ public class WordleGame {
         }
 
         Random random = new Random();
-        this.word = words.get(random.nextInt(words.size()));
-
-        System.out.println("Randomly selected word: " + this.word);
-    }
-
-    public String getWord() {
-        return this.word;
+        return words.get(random.nextInt(words.size()));
     }
 }
 

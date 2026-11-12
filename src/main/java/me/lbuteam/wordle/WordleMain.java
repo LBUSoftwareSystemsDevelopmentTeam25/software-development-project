@@ -8,7 +8,7 @@ public class WordleMain {
     private final WordleUI ui;
 
     public WordleMain() {
-        this.game = new WordleGame();
+        this.game = new WordleGame(this);
         this.ui = new WordleUI(this);
     }
 
