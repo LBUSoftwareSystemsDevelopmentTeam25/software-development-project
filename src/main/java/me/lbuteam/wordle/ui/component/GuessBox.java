@@ -5,6 +5,7 @@ import me.lbuteam.wordle.game.WordleGame;
 import me.lbuteam.wordle.ui.UIConstant;
 import me.lbuteam.wordle.ui.WordleUI;
 import me.lbuteam.wordle.util.WordleGuessUtil;
+import me.lbuteam.wordle.util.WordValidator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GuessBox {
+    private static final WordValidator validator = new WordValidator();
     private final WordleGame game;
     private final WordleUI ui;
     private final JFrame parent;
@@ -37,6 +39,16 @@ public class GuessBox {
                 .map((box) -> box.label().getText())
                 .collect(Collectors.joining());
         if (guess.strip().length() != 5) return;
+
+        if (!validator.isValidWord(guess)) {
+            JOptionPane.showMessageDialog(
+                    this.parent,
+                    "Not a valid word! Please try again.",
+                    "Invalid Word",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
 
         this.ui.incrementGuess();
         new Thread(() -> {
