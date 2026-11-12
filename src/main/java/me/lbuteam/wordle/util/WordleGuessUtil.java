@@ -11,26 +11,30 @@ public class WordleGuessUtil {
         final char[] guessLetters = guess.toUpperCase().toCharArray();
         final char[] wordLetters = word.toUpperCase().toCharArray();
 
-        final Set<Character> remainingWordLetters = new HashSet<>();
-        final int[] result = new int[] { NONE_CORRECT, NONE_CORRECT, NONE_CORRECT, NONE_CORRECT, NONE_CORRECT };
-        for (int index = 0; index < word.length(); index++) {
-            final char guessLetter = guessLetters[index];
-            final char wordLetter = wordLetters[index];
-            if (guessLetter != wordLetter) {
-                remainingWordLetters.add(wordLetter);
+        final int[] result = new int[wordLetters.length];
+        final int[] letterCounts = new int[26];
+
+        for (int index = 0; index < wordLetters.length; index++) {
+            if (guessLetters[index] == wordLetters[index]) {
+                result[index] = CORRECT;
                 continue;
             }
 
-            result[index] = CORRECT;
+            letterCounts[wordLetters[index] - 'A']++;
         }
 
-        if (remainingWordLetters.isEmpty()) return result;
+        for (int index = 0; index < guessLetters.length; index++) {
+            if (result[index] == CORRECT) {
+                continue;
+            }
 
-        for (int index = 0; index < guess.length(); index++) {
-            final char guessLetter = guessLetters[index];
-            if (!remainingWordLetters.remove(guessLetter)) continue;
+            final int letterIdx = guessLetters[index] - 'A';
+            if (letterIdx < 0 || letterIdx >= 26 || letterCounts[letterIdx] <= 0) {
+                continue;
+            }
 
             result[index] = CONTAINS;
+            letterCounts[letterIdx]--;
         }
 
         return result;
